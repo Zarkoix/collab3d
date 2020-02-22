@@ -31,10 +31,7 @@ function Model({ setModelSize, ...props }) {
   return <primitive object={gltf.scene} {...props} />;
 }
 
-function Pin({ setPinLocation, ...props }) {
-  setPinLocation = e => {
-    console.log(e);
-  };
+function Pin({}) {
   var pin = (
     <mesh
       visible
@@ -121,8 +118,11 @@ export function ModelRenderer({
       />
       <ambientLight />
       <Suspense fallback={null}>
-        <Model setModelSize={setModelSize} onClick={e => setPinLocation(e)} />
-        <Pin setPinLocation={setPinLocation} />
+        <Model
+          setModelSize={setModelSize}
+          onPointerMove={e => console.log(e)}
+        />
+        <Pin />
       </Suspense>
     </Canvas>
   );
