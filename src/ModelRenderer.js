@@ -31,6 +31,24 @@ function Model({ setModelSize, ...props }) {
   return <primitive object={gltf.scene} {...props} />;
 }
 
+function Pin({ setPinLocation, ...props }) {
+  setPinLocation = e => {
+    console.log(e);
+  };
+  var pin = (
+    <mesh
+      visible
+      userData={{ test: "hello" }}
+      position={[0, 0, 0]}
+      rotation={[0, 0, 0]}
+    >
+      <sphereGeometry attach="geometry" args={[1, 16, 16]} />
+      <meshStandardMaterial attach="material" color="hotpink" transparent />
+    </mesh>
+  );
+  return pin;
+}
+
 function Controls({ cameraPosition, modelSize, controls, ...props }) {
   function updateCamera(position, target, camera, controls) {
     camera.position.set(...position);
@@ -62,11 +80,9 @@ function Controls({ cameraPosition, modelSize, controls, ...props }) {
         camera,
         controls
       );
-      console.log(cameraPosition);
     }
   }, [camera, cameraPosition, controls]);
 
-  console.log(cameraPosition);
   return (
     <orbitControls ref={controls} args={[camera, domElement]} {...props} />
   );
@@ -78,7 +94,7 @@ export function ModelRenderer({
   setOrbitControls,
   ...props
 }) {
-  const [modelSize, setModelSize] = useState(undefined);
+  const [modelSize, setModelSize, setPinLocation] = useState(undefined);
 
   const controls = useRef();
   useEffect(() => {
@@ -105,7 +121,8 @@ export function ModelRenderer({
       />
       <ambientLight />
       <Suspense fallback={null}>
-        <Model setModelSize={setModelSize} />
+        <Model setModelSize={setModelSize} onClick={e => setPinLocation(e)} />
+        <Pin setPinLocation={setPinLocation} />
       </Suspense>
     </Canvas>
   );
