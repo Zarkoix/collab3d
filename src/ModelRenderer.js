@@ -31,12 +31,12 @@ function Model({ setModelSize, ...props }) {
   return <primitive object={gltf.scene} {...props} />;
 }
 
-function Pin({}) {
+function Pin({ position = [0, 0, 0] }) {
   var pin = (
     <mesh
       visible
       userData={{ test: "hello" }}
-      position={[0, 0, 0]}
+      position={position}
       rotation={[0, 0, 0]}
     >
       <sphereGeometry attach="geometry" args={[1, 16, 16]} />
@@ -91,7 +91,8 @@ export function ModelRenderer({
   setOrbitControls,
   ...props
 }) {
-  const [modelSize, setModelSize, setPinLocation] = useState(undefined);
+  const [modelSize, setModelSize] = useState();
+  const [pinLocation, setPinLocation] = useState();
 
   const controls = useRef();
   useEffect(() => {
@@ -120,9 +121,11 @@ export function ModelRenderer({
       <Suspense fallback={null}>
         <Model
           setModelSize={setModelSize}
-          onPointerMove={e => console.log(e)}
+          onPointerMove={e =>
+            console.log(e) || setPinLocation(e.point.toArray())
+          }
         />
-        <Pin />
+        <Pin position={pinLocation} />
       </Suspense>
     </Canvas>
   );
